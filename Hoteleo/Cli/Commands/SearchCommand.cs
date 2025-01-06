@@ -22,7 +22,10 @@ namespace Hoteleo.Cli.Commands
         {
             var arguments = ExtractArguments(command);
 
-            var availableRoomsCount = _roomFindingService.GetNumberOfAvailableRoomsOverTime(arguments.HotelId, arguments.RoomType, arguments.DatesRange);
+            var availableRoomsCount =
+                _roomFindingService
+                .GetNumberOfAvailableRoomsOverTime(arguments.HotelId, arguments.RoomType, arguments.DatesRange)
+                .Where(a => a.FreeRoomsCount > 0);
 
             var dateFormat = "yyyyMMdd";
             var output = string.Join(',', availableRoomsCount.Select(x => $"({x.Range.Start.ToString(dateFormat)}-{x.Range.End.ToString(dateFormat)}, {x.FreeRoomsCount})"));

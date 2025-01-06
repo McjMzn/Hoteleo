@@ -28,6 +28,10 @@ namespace Hoteleo.Tests
         ];
 
         private readonly IReadOnlyList<Booking> Bookings = [
+            new() { HotelId = "H1", Arrival = new DateTime(2024, 8, 1), Departure = new DateTime(2024, 8, 31), RoomType = "SGL" },
+            new() { HotelId = "H1", Arrival = new DateTime(2024, 8, 1), Departure = new DateTime(2024, 8, 31), RoomType = "SGL" },
+
+
             new() { HotelId = "H1", Arrival = new DateTime(2024, 9, 1), Departure = new DateTime(2024, 9, 3), RoomType = "DBL" },
             new() { HotelId = "H1", Arrival = new DateTime(2024, 9, 2), Departure = new DateTime(2024, 9, 5), RoomType = "SGL" },
 
@@ -73,7 +77,8 @@ namespace Hoteleo.Tests
         [InlineData(new string[] { "Availability(H1, 20240114, SGL)", "" }, ExitCode.Success, new string[] { "-3", "" })]
         [InlineData(new string[] { "Availability(H1, 20240101-20240114, SGL)", "" }, ExitCode.Success, new string[] { "-3", "" })]
         [InlineData(new string[] { "Availability(H1, 20231231-20240110, SGL)", "" }, ExitCode.Success, new string[] { "1", "" })]
-        [InlineData(new string[] { "Search(H1,365,SGL)", "" }, ExitCode.Success, new string[] { "(20240801-20240902, 2),(20240902-20240905, 1),(20240905-20250801, 2)", "" })]
+        [InlineData(new string[] { "Search(H1,365,SGL)", "" }, ExitCode.Success, new string[] { "(20240831-20240902, 2),(20240902-20240905, 1),(20240905-20250801, 2)", "" })]
+        [InlineData(new string[] { "Search(H1,30,SGL)", "" }, ExitCode.Success, new string[] { "", "" })]
         [InlineData(new string[] { "Search(H1, 365, DBL)", "" }, ExitCode.Success, new string[] { "(20240801-20240901, 2),(20240901-20240903, 1),(20240903-20250801, 2)", "" })]
         public void Run_ProvidedSearchCommandFollowedByEmptyLine_ShouldPrintExpectedOutputAndExitWithExpectedExitCode(string[] input, int expectedExitCode, string[] expectedOutputLines)
         {
