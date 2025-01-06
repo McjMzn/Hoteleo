@@ -7,28 +7,28 @@ namespace Hoteleo.Cli.Generic
         private readonly ISystemConsole _systemConsole;
         private readonly IEnumerable<ICliApplicationCommand> commands;
 
-        public CliApplication(ISystemConsole systemConsole, IEnumerable<ICliApplicationCommand> commands)
+        public CliApplication(ISystemConsole systemConsole, IEnumerable<ICliApplicationCommand> _commands)
         {
             _systemConsole = systemConsole;
-            this.commands = commands;
+            _commands = _commands;
         }
 
         public int Run(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                var invocation = _systemConsole.ReadLine();
-                var applicableCommands = commands.Where(c => c.CanRun(invocation)).ToArray();
+                var command = _systemConsole.ReadLine();
+                var applicableCommands = commands.Where(c => c.CanRun(command)).ToArray();
 
                 if (applicableCommands.Length == 0)
                 {
-                    _systemConsole.WriteLine("Unrecognized invocation.");
+                    _systemConsole.WriteLine("Unrecognized command.");
                     continue;
                 }
 
                 if (applicableCommands.Length > 1)
                 {
-                    _systemConsole.WriteLine("Ambiguous invocation.");
+                    _systemConsole.WriteLine("Ambiguous command.");
                     continue;
                 }
 
@@ -36,7 +36,7 @@ namespace Hoteleo.Cli.Generic
 
                 try
                 {
-                    result = applicableCommands.Single().Run(invocation);
+                    result = applicableCommands.Single().Run(command);
                     _systemConsole.WriteLine(result.Output);
                 }
                 catch
