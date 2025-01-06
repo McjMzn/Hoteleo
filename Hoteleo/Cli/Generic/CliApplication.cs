@@ -5,12 +5,12 @@ namespace Hoteleo.Cli.Generic
     internal class CliApplication
     {
         private readonly ISystemConsole _systemConsole;
-        private readonly IEnumerable<ICliApplicationCommand> commands;
+        private readonly IEnumerable<ICliApplicationCommand> _commands;
 
-        public CliApplication(ISystemConsole systemConsole, IEnumerable<ICliApplicationCommand> _commands)
+        public CliApplication(ISystemConsole systemConsole, IEnumerable<ICliApplicationCommand> commands)
         {
             _systemConsole = systemConsole;
-            _commands = _commands;
+            _commands = commands;
         }
 
         public int Run(CancellationToken cancellationToken)
@@ -18,7 +18,7 @@ namespace Hoteleo.Cli.Generic
             while (!cancellationToken.IsCancellationRequested)
             {
                 var command = _systemConsole.ReadLine();
-                var applicableCommands = commands.Where(c => c.CanRun(command)).ToArray();
+                var applicableCommands = _commands.Where(c => c.CanRun(command)).ToArray();
 
                 if (applicableCommands.Length == 0)
                 {
